@@ -82,20 +82,20 @@ while(1):
         #     angle=0
 
         #draw all 3 lines
-        cv2.line(copy_frame, (color1_x, color1_y), (color2_x, color2_y), (0, 0, 255), 2)
-        cv2.line(copy_frame, (color1_x, color1_y), (color2_x, color1_y), (0, 0, 255), 2)
-        cv2.line(copy_frame, (color2_x, color2_y), (color2_x, color1_y), (0, 0, 255), 2)
+        cv2.line(copy_frame, (color1_x, color1_y), (color2_x, color2_y), (0, 0, 255), 1)
+        cv2.line(copy_frame, (color1_x, color1_y), (color2_x, color1_y), (0, 0, 255), 1)
+        cv2.line(copy_frame, (color2_x, color2_y), (color2_x, color1_y), (0, 0, 255), 1)
 
         #put angle text (allow for calculations upto 180 degrees)
         angle_text = ""
         if color2_y < color1_y and color2_x > color1_x:
-            angle_text = str(int(angle))
+            angle_text = str(angle)
         elif color2_y < color1_y and color2_x < color1_x:
-            angle_text = str(int(180 - angle))
+            angle_text = str(180 - angle)
         elif color2_y > color1_y and color2_x < color1_x:
-            angle_text = str(int(180 + angle))
+            angle_text = str(180 + angle)
         elif color2_y > color1_y and color2_x > color1_x:
-            angle_text = str(int(360 - angle))
+            angle_text = str(360 - angle)
         
         #CHANGE FONT HERE
         cv2.putText(copy_frame, angle_text, (color1_x-30, color1_y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 128, 229), 2)

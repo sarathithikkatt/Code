@@ -61,7 +61,7 @@ def getOrientation(pts, img):
   return angle
  
 
-vid = cv.VideoCapture(0,cv.CAP_DSHOW)
+vid = cv.VideoCapture(1,cv.CAP_DSHOW)
 
 while(1):
     _, orig_frame = vid.read()

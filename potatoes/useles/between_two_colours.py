@@ -60,7 +60,7 @@ def find_color2(frame):
 def dist(x,y,u,v):
     return str(math.sqrt((u-x)**2+(v-y)**2))
 
-cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(1,cv2.CAP_DSHOW)
 
 while(1):
     timer=cv2.getTickCount()

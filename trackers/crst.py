@@ -2,7 +2,7 @@ import cv2
 
 cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
 
-tracker=cv2.legacy.TrackerMOSSE_create()
+tracker=cv2.legacy.TrackerCSRT_create()
 success, img=cap.read()
 bbox=cv2.selectROI("Trial",img,False)
 print(bbox)

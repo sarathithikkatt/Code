@@ -1,6 +1,7 @@
 import cv2
 import math
 import numpy as np
+import random as rng
 
 target_x,target_y=0,0
 
@@ -8,7 +9,7 @@ def distance(x1, y1, x2, y2):
     dist = math.sqrt(math.fabs(x2-x1)**2 + math.fabs(y2-y1)**2)
     return dist
 
-def red_color(frame):
+def full_box(frame):
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     # hsv_lowerbound = np.array([141,0,0])
     hsv_lowerbound = np.array([141,0,227])
@@ -17,28 +18,34 @@ def red_color(frame):
     res = cv2.bitwise_and(frame, frame, mask=mask)
     cnts, hir = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     if len(cnts) > 0:
-        maxcontour = max(cnts, key=cv2.contourArea)
-        
+        maxcontour = max(cnts, key=cv2.contourArea) 
         M = cv2.moments(maxcontour)
         if M['m00'] > 0 and cv2.contourArea(maxcontour) > 1000:
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
-            return (cx, cy), True
+            return M, True
         else:
-            return (700, 700), False
+            return None, False
     else:
-        return (700, 700), False
+        return None, False       
+    #     M = cv2.moments(maxcontour)
+    #     if M['m00'] > 0 and cv2.contourArea(maxcontour) > 1000:
+    #         cx = int(M['m10']/M['m00'])
+    #         cy = int(M['m01']/M['m00'])
+    #         return (cx, cy), True
+    #     else:
+    #         return (700, 700), False
+    # else:
+    #     return (700, 700), False
 
-def blue_color(frame):
+def lights(frame):
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    hsv_lowerbound = np.array([71,0,226])
-    hsv_upperbound = np.array([145,255,255])
+    hsv_lowerbound = np.array([141,0,0])
+    hsv_upperbound = np.array([169,241,255])
     mask = cv2.inRange(hsv_frame, hsv_lowerbound, hsv_upperbound)
     res = cv2.bitwise_and(frame, frame, mask=mask)
-    cnts, hir = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) 
+    cnts, hir = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     if len(cnts) > 0:
         maxcontour = max(cnts, key=cv2.contourArea)
-
+        
         M = cv2.moments(maxcontour)
         if M['m00'] > 0 and cv2.contourArea(maxcontour) > 1000:
             cx = int(M['m10']/M['m00'])
@@ -83,8 +90,10 @@ while(True):
     timer=cv2.getTickCount()
     ret, frame = cap.read()
     copy_frame = frame.copy() 
-    (color1_x, color1_y), found_red = red_color(copy_frame)
-    
+    # (color1_x, color1_y), found_red = full_box(copy_frame)
+    M, found_red = full_box(copy_frame)
+    color = (rng.randint(0,256), rng.randint(0,256), rng.randint(0,256))
+    cv2.drawContours(copy_frame,M,0,color)
     cv2.imshow("Orginal Feed",frame)
     fps =str(int(cv2.getTickFrequency()/(cv2.getTickCount()-timer)))
     cv2.putText(copy_frame,"FPS:"+fps,(30,30),cv2.FONT_HERSHEY_COMPLEX, 1, (0, 128, 229), 2)
